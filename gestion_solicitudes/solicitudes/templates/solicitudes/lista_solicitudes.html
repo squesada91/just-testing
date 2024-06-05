@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Solicitudes</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Lista de Solicitudes</h1>
+        <div class="text-right mb-3">
+            <a href="{% url 'crear_solicitud' %}" class="btn btn-success">Crear Nueva Solicitud</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-info">Administrar Usuarios</a>
+            {% endif %}
+            <a href="{% url 'logout' %}" class="btn btn-secondary">Cerrar Sesion</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Descripcion</th>
+                    <th>Fecha de Creacion</th>
+                    <th>Estado</th>
+                    {% if user.is_superuser %}
+                    <th>Acciones</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes %}
+                <tr>
+                    <td>{{ solicitud.tipo }}</td>
+                    <td>{{ solicitud.descripcion }}</td>
+                    <td>{{ solicitud.fecha_creacion }}</td>
+                    <td>{{ solicitud.estado }}</td>
+                    {% if user.is_superuser %}
+                    <td>
+                        <a href="{% url 'aprobar_solicitud' solicitud.id %}" class="btn btn-primary btn-sm">Aprobar</a>
+                        <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn btn-danger btn-sm">Rechazar</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
